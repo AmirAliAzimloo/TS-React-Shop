@@ -15,7 +15,7 @@ export default function Cart() {
           <main className="card-index">
             <div className="card">
               <img
-                src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+                src="https:// .com/img/81fPKd-2AYL._AC_SL1500_.jpg"
                 alt=""
               />
               <main>
