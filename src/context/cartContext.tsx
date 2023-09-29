@@ -1,5 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 import { Product } from "../Components/Products.types";
+import axios from "axios";
 
 type CartContextProvuderProps = {
   children: React.ReactNode;
@@ -15,19 +16,37 @@ type CartContextType = {
 
 export const CartContext = createContext({} as CartContextType);
 
-const CartContextProvuder = ({ children }: CartContextProvuderProps) => {
+const CartContextProvider = ({ children }: CartContextProvuderProps) => {
   const [UserCart, setUserCart] = useState<Product[]>([]);
   const [shop, setShop] = useState<Product[]>([]);
 
+  useEffect(() => {
+    axios
+      .get("https://fakestoreapi.com/products")
+      .then((res) => setShop(res.data));
+  }, []);
+
   const addProduct = (id: number) => {
-    // Code ...
+    setUserCart(prevProducts=>{
+        const mainProductInCart = prevProducts.find(product => product.id == id)
+        if(mainProductInCart){
+            return prevProducts.map(product => {
+                if(product.id == id){
+                    return {...product, count: product.count + 1 }
+                }else{
+                    return {...product}
+                }
+            })
+        }else{
+            const mainProductInShop = shop.find(product=>product.id == id) as Product
+            return [...prevProducts,{...mainProductInShop,count:1}]
+        }
+    })
   };
   const removeProduct = (id: number) => {
-    // Code ...
+    setUserCart(prevProducts=>prevProducts.filter(product=> product.id !== id))
   };
-  const removeAll = () => {
-    // Code ...
-  };
+  const removeAll = () => setUserCart([]);
   return (
     <CartContext.Provider
       value={{
@@ -42,3 +61,5 @@ const CartContextProvuder = ({ children }: CartContextProvuderProps) => {
     </CartContext.Provider>
   );
 };
+
+export default CartContextProvider;

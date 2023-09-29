@@ -1,5 +1,5 @@
 export type Product = {
-  id: string;
+  id: number;
   title: string;
   price: number;
   description: string;
@@ -9,4 +9,5 @@ export type Product = {
     rate: number;
     count: number;
   };
+  count:number
 };
